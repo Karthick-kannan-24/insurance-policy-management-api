@@ -1,0 +1,31 @@
+{
+  "name": "insurance-assessment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "start:pm2": "pm2 start src/server.js --name insurance-api",
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "csv-parser": "^3.2.1",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.2",
+    "multer": "^2.4.0",
+    "node-cron": "^4.6.0",
+    "pm2": "^7.0.4",
+    "uuid": "^14.0.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
