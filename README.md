@@ -1,83 +1,66 @@
-Insurance Policy Management API
+# 🚀 Insurance Policy Management API
 
 A Node.js backend application developed as a technical assessment for importing insurance policy data from CSV/XLSX files into MongoDB, searching policy information, aggregating policies by user, monitoring server CPU utilization, and scheduling messages.
 
-Tech Stack
+---
 
-Node.js
+## 🧩 Tech Stack
 
-JavaScript (ES Modules)
+- Node.js
+- JavaScript (ES Modules)
+- Express.js
+- MongoDB
+- Mongoose
+- Worker Threads
+- Multer
+- XLSX
+- Node-Cron
+- PM2
+- Docker
+- Docker Compose
 
-Express.js
+---
 
-MongoDB
+## ✨ Features
 
-Mongoose
+### 🔹 Task 1
 
-Worker Threads
+- Upload CSV/XLSX insurance data
+- Process uploaded files using Node.js Worker Threads
+- Store data in separate MongoDB collections
+- Search policy information using username
+- Aggregate policies by each user
+- Deduplicate imported records
+- Remove temporary uploaded files after processing
 
-Multer
+### 🔹 Task 2
 
-XLSX
+- Monitor Node.js server CPU utilization
+- Check CPU usage every 5 seconds
+- Restart the server when CPU utilization reaches 70%
+- Schedule messages using day and time
+- Store scheduled messages in MongoDB
+- Process scheduled messages using a cron scheduler
 
-Node-Cron
+---
 
-PM2
-
-Docker
-
-Docker Compose
-
-Features
-Task 1
-
-Upload CSV/XLSX insurance data.
-
-Process uploaded files using Node.js Worker Threads.
-
-Store data in separate MongoDB collections.
-
-Search policy information using username.
-
-Aggregate policies by each user.
-
-Deduplicate imported records.
-
-Remove temporary uploaded files after processing.
-
-Task 2
-
-Monitor Node.js server CPU utilization.
-
-Check CPU usage every 5 seconds.
-
-Restart the server when CPU utilization reaches 70%.
-
-Schedule messages using day and time.
-
-Store scheduled messages in MongoDB.
-
-Process scheduled messages using a cron scheduler.
-
-MongoDB Collections
+## 🗄️ MongoDB Collections
 
 The application uses separate collections for:
 
-agents
+- `agents`
+- `users`
+- `accounts`
+- `lobs`
+- `carriers`
+- `policies`
+- `messages`
 
-users
+---
 
-accounts
+## 📁 Project Structure
 
-lobs
-
-carriers
-
-policies
-
-messages
-
-Project Structure
+```text
 insurance-assessment/
 ├── src/
 │   ├── app.js
@@ -128,156 +111,193 @@ insurance-assessment/
 ├── .env
 ├── .gitignore
 └── README.md
+```
 
-Environment Variables
+---
 
-Create a .env file in the project root:
+## ⚙️ Setup Instructions
 
+### 🔹 1. Clone Repository
+
+```
+git clone https://github.com/Karthick-kannan-24/insurance-policy-management-api.git
+cd insurance-assessment
+```
+
+### 🔹 2. Install Dependencies
+
+```
+npm install
+```
+
+### 🔹 3. Start Development Server
+
+```
+npm run dev
+```
+The API will be available at:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🌐 Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
 PORT=3000
 MONGO_URI=mongodb://127.0.0.1:27017/insurance_assessment
 NODE_ENV=development
+```
 
-Docker Compose
+---
 
-When running the complete application using Docker Compose, use:
+## 🐳 Docker Compose
 
+When running the complete application with Docker Compose:
+
+```
 MONGO_URI=mongodb://mongodb:27017/insurance_assessment
+```
 
-Installation
-1. Clone the Repository
-git clone <repository-url>
-cd insurance-assessment
+---
 
-2. Install Dependencies
-npm install
+## 🔗 API Endpoints
 
-3. Start the Development Server
-npm run dev
+### ❤️ Health Check
 
-
-The API will be available at:
-
-http://localhost:3000
-
-API Endpoints
-Health Check
-
-GET /api/health
+**GET** `/api/health`
 
 Example:
 
-curl http://localhost:3000/api/health
+```bash
+GET http://localhost:3000/api/health
+```
 
-Upload Insurance Data
+### 📤 Upload Insurance Data
 
-POST /api/upload
+**POST** `/api/upload`
 
 Uploads and processes insurance data from a CSV or XLSX file.
 
-Request
+#### Request
+
+```text
 Content-Type: multipart/form-data
-
-
+```
 Form field:
 
+```text
 file
+```
+### Supported Formats
 
+- CSV
+- XLSX
 
-Supported formats:
+### Example Using Postman
 
-CSV
-
-XLSX
-
-Example Using Postman
+```text
 POST http://localhost:3000/api/upload
+```
+Body → form-data:
 
-
-Select:
-
-Body → form-data
+```
 file → <CSV/XLSX file>
-
-
+```
 The uploaded file is processed using a Worker Thread and removed after processing.
 
-Search Policy by Username
+### 🔍 Search Policy by Username
 
-GET /api/policies/search?username=<username>
+**GET** `/api/policies/search?username=<username>`
 
 Example:
 
-GET /api/policies/search?username=Lura%20Lucca
-
-
+```bash
+GET http://localhost:3000/api/policies/search?username=LuraLucca
+```
 The response contains:
 
-User information
+- `User information`
+- `Agent`
+- `Account`
+- `Policies`
+- `Carrier`
+- `LOB`
 
-Agent
+### 📊 Aggregate Policies by User
 
-Account
+**GET** `/api/policies/aggregate`
 
-Policies
+Example:
 
-Carrier
-
-LOB
-
-Aggregate Policies by User
-
-GET /api/policies/aggregate
+```bash
+GET http://localhost:3000/api/policies/aggregate
+```
 
 Returns policies grouped by user along with:
 
-User information
+- `User information`
+- `Agent`
+- `Account`
+- `Policy list`
+- `Policy count`
 
-Agent
+### 📨 Schedule Message
 
-Account
+**POST** `/api/messages/schedule`
 
-Policy list
+Example:
 
-Policy count
+```bash
+POST http://localhost:3000/api/messages/schedule
+```
 
-Schedule Message
+Request body:
 
-POST /api/messages/schedule
-
-Request Body
+```json
 {
   "message": "Test scheduled message",
   "day": "2026-09-24",
   "time": "18:30"
 }
+```
+The message is stored with a `scheduled` status and processed when the scheduled time is reached.
 
+---
 
-The message is stored with a scheduled status and processed when the scheduled time is reached.
-
-CPU Monitoring
+## 🖥️ CPU Monitoring
 
 The application monitors CPU utilization every 5 seconds.
 
-Configuration
+### Configuration
 
-CPU Threshold: 70%
-
-Check Interval: 5 seconds
+- **CPU Threshold:** 70%
+- **Check Interval:** 5 seconds
 
 When CPU utilization reaches or exceeds 70%, PM2 is used to restart the application:
 
+```bash
 pm2 restart insurance-api
+```
+The application can be started using:
 
-
-The application can be started using PM2:
-
+```bash
 npm run start:pm2
+```
 
-Worker Thread Processing
+---
+
+## 🧵 Worker Thread Processing
 
 The file import operation uses Node.js Worker Threads to prevent heavy CSV/XLSX processing from blocking the main Node.js event loop.
 
-Processing Flow
+### Processing Flow
+
+```text
 Upload File
      ↓
 Main Node.js Thread
@@ -293,12 +313,17 @@ MongoDB Bulk Operations
 Worker Response
      ↓
 Temporary File Cleanup
+```
 
-Message Scheduling
+---
 
-The message scheduler uses node-cron to check scheduled messages every minute.
+## ⏰ Message Scheduling
 
-Scheduling Flow
+The message scheduler uses `node-cron` to check scheduled messages every minute.
+
+### Scheduling Flow
+
+```text
 POST Message
      ↓
 MongoDB
@@ -312,101 +337,78 @@ Scheduled Time Reached
 Process Message
      ↓
 Status: sent
+```
 
-Docker
-Build and Start the Application
+---
+
+## 🐳 Docker
+
+### 🔹 Build and Start the Application
+
+```bash
 docker compose up --build
+```
 
-Run in Detached Mode
+### 🔹 Run in Detached Mode
+
+```bash
 docker compose up -d --build
+```
 
-Stop Containers
+### 🔹 Stop Containers
+
+```bash
 docker compose down
+```
 
-Testing
+---
+
+## 🧪 Testing
 
 Run the Node.js test command:
 
+```bash
 npm test
+```
+API testing can be performed using `Postman` or any REST client.
 
+---
 
-API testing can be performed using Postman or any REST client.
-
-Error Handling
+## ⚠️ Error Handling
 
 The application includes centralized error handling for:
 
-Validation errors
+- Validation errors
+- MongoDB duplicate key errors
+- Mongoose cast errors
+- Multer errors
+- Unknown routes
+- Unexpected server errors
 
-MongoDB duplicate key errors
+---
 
-Mongoose cast errors
+## 🔐 Security & Code Quality
 
-Multer errors
+- Environment variables are used for configuration
+- `.env` is excluded from Git
+- Uploaded files are validated for CSV/XLSX extensions
+- File size is limited
+- MongoDB operations use bulk writes where appropriate
+- Temporary uploaded files are removed after processing
+- Express `x-powered-by` header is disabled
+- Graceful shutdown is implemented for the Node.js server
 
-Unknown routes
+---
 
-Unexpected server errors
+## 👨‍💻 Author
 
-Security & Code Quality
+**Karthick Kannan R.**
 
-Environment variables are used for configuration.
+- GitHub: https://github.com/Karthick-kannan-24
+- LinkedIn: https://www.linkedin.com/in/karthick-kannan-2421997/
 
-.env is excluded from Git.
+---
 
-Uploaded files are validated for CSV/XLSX extensions.
+## 📄 License
 
-File size is limited.
-
-MongoDB operations use bulk writes where appropriate.
-
-Temporary uploaded files are removed after processing.
-
-Express x-powered-by header is disabled.
-
-Graceful shutdown is implemented for the Node.js server.
-
-Assessment Requirements
-Task 1
-
- CSV/XLSX upload API
-
- Worker Thread processing
-
- MongoDB integration
-
- Agent collection
-
- User collection
-
- User Account collection
-
- LOB collection
-
- Carrier collection
-
- Policy collection
-
- Policy search API
-
- Policy aggregation API
-
-Task 2
-
- Real-time CPU monitoring
-
- 70% CPU threshold
-
- Automatic server restart
-
- Message scheduling API
-
- Day and time-based scheduling
-
- MongoDB persistence
-
- JavaScript implementation
-
-Author
-
-Karthick Kannan R.
+This project is open-source and available under the `MIT License`.
